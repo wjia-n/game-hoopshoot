@@ -78,7 +78,6 @@ class HoopEngine {
   double hoopBaseX = 0; // resting center
   double hoopY = 0;
   double wind = 0; // current wind accel, px/s^2
-  double _windT = 0;
   double netSnap = 0; // 1.0 on swish, decays — UI draws the net bulge
   double rimShake = 0; // 1.0 on rim bounce, decays
 
@@ -278,7 +277,6 @@ class HoopEngine {
   }
 
   void _updateWind(double dt) {
-    _windT += dt;
     if (difficulty.windMax <= 0) {
       wind = 0;
       return;
