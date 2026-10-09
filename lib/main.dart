@@ -1,25 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:wajiha_game_core/wajiha_game_core.dart';
-import 'game_screen.dart';
+import 'package:flutter/services.dart';
+import 'screens/splash_screen.dart';
+import 'services/audio_service.dart';
+import 'services/settings_service.dart';
 
-void main() => runApp(const HoopShootApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  final settings = HoopSettings();
+  await settings.load();
+  final audio = HoopAudio();
+  audio.configure(
+    musicOn: settings.musicOn,
+    sfxOn: settings.sfxOn,
+    volume: settings.volume,
+  );
+  runApp(HoopShootApp(settings: settings, audio: audio));
+}
 
-class HoopShootApp extends StatelessWidget {
-  const HoopShootApp({super.key});
+class HoopShootApp extends StatefulWidget {
+  final HoopSettings settings;
+  final HoopAudio audio;
+  const HoopShootApp({super.key, required this.settings, required this.audio});
+
+  @override
+  State<HoopShootApp> createState() => _HoopShootAppState();
+}
+
+class _HoopShootAppState extends State<HoopShootApp>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    widget.audio.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Pause (not stop) on interruption so music resumes exactly where it
+    // left off; game screens additionally freeze their engines.
+    if (state == AppLifecycleState.paused) {
+      widget.audio.onAppPaused();
+    } else if (state == AppLifecycleState.resumed) {
+      widget.audio.onAppResumed();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GameShell(
-      variant: ShellVariant.softBlob,
-      title: 'Hoop Shoot',
-      tagline: 'Swish shot after shot in arcade basketball',
-      emoji: '🏀',
-      slug: 'hoopshoot',
-      howToPlay:
-          '• FLICK UP on the ball to shoot. Aim with your flick angle!\n• Swish (nothing but net) = 3 pts, off the rim = 2 pts.\n• Two modes: 60-second Shot Clock, or 10-ball Streak.\n• The hoop starts sliding sideways from level 3. Buckets get buckets! 🪣',
-      playerOptions: const [1],
-      supportsBots: false,
-      gameBuilder: (ctx, players, cb) => HoopShootScreen(players: players, callbacks: cb),
+    return ListenableBuilder(
+      listenable: widget.settings,
+      builder: (_, _) => MaterialApp(
+        title: 'Hoop Shoot',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          scaffoldBackgroundColor: widget.settings.theme.wall,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: widget.settings.theme.rimColor,
+            brightness: Brightness.dark,
+          ),
+        ),
+        home:
+            SplashScreen(audio: widget.audio, settings: widget.settings),
+      ),
     );
   }
 }
