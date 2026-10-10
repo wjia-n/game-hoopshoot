@@ -72,7 +72,7 @@ class HoopSettings extends ChangeNotifier {
   int gamesPlayed = 0;
   int totalBaskets = 0;
   int totalSwishes = 0;
-  bool isPro = false;
+  bool isPro = true; // everything unlocked — no Pro version
 
   /// Custom theme colors (ARGB ints). Defaults mirror the Classic Arena.
   Map<String, int> customColors = Map.of(_defaultCustomColors);
@@ -153,7 +153,7 @@ class HoopSettings extends ChangeNotifier {
     gamesPlayed = p.getInt(_kGames) ?? 0;
     totalBaskets = p.getInt(_kBaskets) ?? 0;
     totalSwishes = p.getInt(_kSwishes) ?? 0;
-    isPro = p.getBool(_kIsPro) ?? false;
+    isPro = true; // everything unlocked
     for (final k in _defaultCustomColors.keys) {
       customColors[k] =
           p.getInt('$_kCustomPrefix$k') ?? _defaultCustomColors[k]!;

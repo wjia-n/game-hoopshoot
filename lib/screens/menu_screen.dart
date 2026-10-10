@@ -37,15 +37,7 @@ class _MenuScreenState extends State<MenuScreen> {
     store.proPurchased.addListener(_onPro);
   }
 
-  void _onPro() {
-    if (_store?.proPurchased.value == true && mounted) {
-      s.setPro(true);
-      audio.win();
-      _store!.proPurchased.value = false;
-      setState(() {});
-    }
-  }
-
+  
   @override
   void dispose() {
     _store?.proPurchased.removeListener(_onPro);
