@@ -34,14 +34,12 @@ class _MenuScreenState extends State<MenuScreen> {
     store.init().then((_) {
       if (mounted) setState(() {});
     });
-    store.proPurchased.addListener(_onPro);
-  }
+      }
 
   
   @override
   void dispose() {
-    _store?.proPurchased.removeListener(_onPro);
-    super.dispose();
+        super.dispose();
   }
 
   void _play(String mode) {
@@ -242,8 +240,7 @@ class _MenuScreenState extends State<MenuScreen> {
     if (_store == null) {
       _store = store;
       store.init();
-      store.proPurchased.addListener(_onPro);
-    }
+          }
     audio.click();
     Navigator.of(context)
         .push(MaterialPageRoute(
