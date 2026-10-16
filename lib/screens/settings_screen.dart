@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
 import '../services/settings_service.dart';
 import '../theme/court_themes.dart';
+import '../transfer/transfer_ui.dart';
 
 /// Settings: audio, renameable player profiles, stats, reset.
 class SettingsScreen extends StatefulWidget {
@@ -77,6 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
+              TransferSaveTile(gameSlug: 'hoopshoot'),
           _section('SOUND'),
           SwitchListTile(
             title: Text('Music', style: HoopType.body(15)),
