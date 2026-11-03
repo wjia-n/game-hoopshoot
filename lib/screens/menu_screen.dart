@@ -135,7 +135,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 if (!s.isPro)
                   _ProBadge(
                       onTap: () => _openPro(),
-                      label: 'PRO'),
+                      label: defaultTargetPlatform == TargetPlatform.iOS ? '⭐ Gold Star' : 'PRO'),
               ],
             ),
             const SizedBox(height: 18),
