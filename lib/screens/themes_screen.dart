@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
 import '../services/iap_service.dart';
@@ -129,8 +130,10 @@ class _ThemesScreenState extends State<ThemesScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.lock, size: 11, color: Colors.black),
-          const SizedBox(width: 3),
-          Text('PRO', style: HoopType.label(9, color: Colors.black)),
+          if (defaultTargetPlatform != TargetPlatform.iOS) ...[
+            const SizedBox(width: 3),
+            Text('PRO', style: HoopType.label(9, color: Colors.black)),
+          ],
         ],
       ),
     );
@@ -402,7 +405,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _section('DESIGN YOUR COURT (PRO)'),
+        _section(defaultTargetPlatform == TargetPlatform.iOS ? 'DESIGN YOUR COURT' : 'DESIGN YOUR COURT (PRO)'),
         for (final key in HoopSettings.customColorLabels.keys)
           _colorRow(key, HoopSettings.customColorLabels[key]!),
         Center(

@@ -72,12 +72,12 @@ class _MenuScreenState extends State<MenuScreen> {
             'MODES\n'
             '• Shot Clock: 60 seconds, as many buckets as you can.\n'
             '• Streak: 10 balls, make every one count.\n'
-            '• Endless (PRO): shoot until 3 straight misses.\n'
+            '• Endless${defaultTargetPlatform == TargetPlatform.iOS ? '' : ' (PRO)'}: shoot until 3 straight misses.\n'
             '• Shootout: pass-and-play, 5 shots each, sudden death on ties.\n\n'
             'DIFFICULTY\n'
             '• Rookie: steady hoop, easy rim.\n'
             '• Street: the hoop drifts, light wind.\n'
-            '• All-Star (PRO): fast hoop, tight rim, gusty wind.',
+            '• All-Star${defaultTargetPlatform == TargetPlatform.iOS ? '' : ' (PRO)'}: fast hoop, tight rim, gusty wind.',
             style: HoopType.body(14),
           ),
         ),
@@ -202,7 +202,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         () => _open(SettingsScreen(audio: audio, settings: s)))),
                 const SizedBox(width: 10),
                 Expanded(
-                    child: _navButton(t, Icons.star, 'Pro',
+                    child: _navButton(t, Icons.star, defaultTargetPlatform == TargetPlatform.iOS ? 'Gold Star' : 'Pro',
                         () => _openPro())),
               ],
             ),
@@ -337,7 +337,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             color: const Color(0xFFE8A820),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text('PRO',
+                          child: Text(defaultTargetPlatform == TargetPlatform.iOS ? '🔒' : 'PRO',
                               style: HoopType.label(10,
                                   color: Colors.black)),
                         ),
